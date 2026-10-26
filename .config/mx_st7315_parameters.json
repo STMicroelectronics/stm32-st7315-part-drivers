@@ -1,0 +1,167 @@
+{
+  "componentid": "::Board Part:STM32CubeMX2 Config:ST7315",
+  "type": "object",
+  "grammarVersion": "3.8.0",
+  "license": "Copyright (c) 2026 STMicroelectronics",
+  "properties": {
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "info": {
+          "title": "ST7315 configuration",
+          "type": "object",
+          "properties": {
+            "labels": {
+              "type": "array",
+              "title": "SW Label for parts objects",
+              "description": "Labels allow to create aliases inside mx_st7315.h file for the object ID and object getter function. These aliases can be used on application side.",
+              "items": {
+                "type": "string",
+                "minLength": 0,
+                "maxLength": 32,
+                "unique": "project",
+                "default": "",
+                "actions": [
+                  {
+                    "type": "error",
+                    "condition": "!/^[A-Za-z_][A-Za-z0-9_]*$/.test($value)",
+                    "message": "Name must be a valid C identifier: start with a letter or underscore, and contain only letters, digits, or underscores."
+                  }
+                ]
+              }
+            },
+            "interface": {
+              "title": "Interface selection",
+              "description": "Select the Interface to be configured",
+              "type": "string",
+              "oneOf": [
+                {
+                  "const": "SPI",
+                  "title": "SPI"
+                },
+                {
+                  "const": "Custom",
+                  "title": "Custom"
+                }
+              ],
+              "default": "SPI",
+              "actions": [
+                {
+                  "type": "info",
+                  "condition": "$info.interface === 'Custom'",
+                  "message": "With the custom interface, no resources can be selected, no code is generated, but IO templates are copied into the project. You must fill them to match your use case."
+                }
+              ]
+            }
+          }
+        },
+        "resourcesAllocation": {
+          "title": "STM32 resources allocation",
+          "type": "object",
+          "properties": {
+            "spiioCfg": {
+              "type": "object",
+              "title": "SPI Interface Configuration",
+              "description": "SPI interface to communicate with the ST7315 LCD.",
+              "actions": [
+                {
+                  "type": "include",
+                  "condition": "$info.interface === 'SPI'"
+                }
+              ],
+              "properties": {
+                "spi_instance": {
+                  "type": "object",
+                  "title": "SPI Instance",
+                  "description": "The SPI peripheral must be configured first in the HAL SPI configuration panel.",
+                  "objectType": "bind.peripheral.config",
+                  "criteria": {
+                    "peripheralType": [
+                      "spi"
+                    ]
+                  },
+                  "actions": [
+                    {
+                      "type": "error",
+                      "condition": "!$resourcesAllocation.spiioCfg.spi_instance?.selection",
+                      "message": "Please select an SPI instance configured in the SPI Peripheral configuration panel."
+                    }
+                  ]
+                },
+                "st7315_rst_pin": {
+                  "title": "RST PIN Configuration",
+                  "description": "The GPIO pin must be configured as an output in the HAL GPIO configuration panel.",
+                  "type": "object",
+                  "objectType": "bind.gpio.config",
+                  "pins": {
+                    "gpiopin": {
+                      "title": "RST PIN",
+                      "constraints": {
+                        "mode": {
+                          "const": "output"
+                        }
+                      }
+                    }
+                  },
+                  "actions": [
+                    {
+                      "type": "error",
+                      "condition": "!$resourcesAllocation.spiioCfg.st7315_rst_pin?.selection",
+                      "message": "Please select a GPIO pin configured as an output in the HAL GPIO configuration panel."
+                    }
+                  ]
+                },
+                "st7315_cs_pin": {
+                  "title": "CS PIN Configuration",
+                  "description": "The GPIO pin must be configured as an output in the HAL GPIO configuration panel.",
+                  "type": "object",
+                  "objectType": "bind.gpio.config",
+                  "pins": {
+                    "gpiopin": {
+                      "title": "CS PIN",
+                      "constraints": {
+                        "mode": {
+                          "const": "output"
+                        }
+                      }
+                    }
+                  },
+                  "actions": [
+                    {
+                      "type": "error",
+                      "condition": "!$resourcesAllocation.spiioCfg.st7315_cs_pin?.selection",
+                      "message": "Please select a GPIO pin configured as an output in the HAL GPIO configuration panel."
+                    }
+                  ]
+                },
+                "st7315_dc_pin": {
+                  "title": "DC PIN Configuration",
+                  "description": "Data/Command pin. The GPIO pin must be configured as an output in the HAL GPIO configuration panel.",
+                  "type": "object",
+                  "objectType": "bind.gpio.config",
+                  "pins": {
+                    "gpiopin": {
+                      "title": "DC PIN",
+                      "constraints": {
+                        "mode": {
+                          "const": "output"
+                        }
+                      }
+                    }
+                  },
+                  "actions": [
+                    {
+                      "type": "error",
+                      "condition": "!$resourcesAllocation.spiioCfg.st7315_dc_pin?.selection",
+                      "message": "Please select a GPIO pin configured as an output in the HAL GPIO configuration panel."
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:stm32="https://developer.st.com/schemas/stm32cube/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="1.7.55" xsi:noNamespaceSchemaLocation="PACK.xsd" xsi:schemaLocation="https://developer.st.com/schemas/stm32cube/1.0.0 stm32cube.xsd">
+  <vendor>STMicroelectronics</vendor>
+  <name>st7315_part_drivers</name>
+  <description>ST7315 Part Drivers SW Pack</description>
+  <url>https://developer.st.com/st-pack-server/api/v1/pack/</url>
+  <repository type="git">https://github.com/STMicroelectronics/stm32-st7315-part-drivers</repository>
+  <supportContact/>
+  <license>LICENSE.md</license>
+  <changelogs>
+    <changelog id="Release Notes" name="Release_Notes.html"/>
+  </changelogs>
+  <environments>
+    <environment name="STM32Cube">
+      <stm32:pack type="PARTDRV" friendlyName="st7315" shortDesc="st7315 part driver">
+        <relocation-info parent="part_drivers" layer="" element=""/>
+        <compatibility>
+          <release version="2.0.0">
+            <applicable-schema schemaType="sw-configuration" schemaVersion="3.8.0"/>
+            <applicable-api-group apiType="codegen-getters">
+              <applicable-api apiType="pinoutAPI" apiVersion="1.0.0"/>
+              <applicable-api apiType="SWConfigurationAPI" apiVersion="1.0.0"/>
+            </applicable-api-group>
+          </release>
+        </compatibility>
+      </stm32:pack>
+    </environment>
+  </environments>
+  <ECCN>
+    <ECCN-EU>NEC</ECCN-EU>
+    <ECCN-US>EAR99</ECCN-US>
+  </ECCN>
+  <releases>
+    <release version="2.0.0" date="2026-08-25">
+      Refer to Release_Notes.md for release details.
+    </release>
+  </releases>
+  <keywords>
+    <keyword>STMicroelectronics</keyword>
+    <keyword>ST</keyword>
+    <keyword>STM32</keyword>
+    <keyword>Parts</keyword>
+    <keyword>Drivers</keyword>
+    <keyword>OLED</keyword>
+    <keyword>HAL</keyword>
+    <keyword>ST7315</keyword>
+    <keyword>GJX-2864TSWBG09</keyword>
+  </keywords>
+  <conditions>
+    <condition id="ST7315 Core Condition">
+      <description>STMicroelectronics ST7315 Core Driver</description>
+      <require Cclass="Board Part" Cgroup="OLED" Csub="ST7315 IO"/>
+    </condition>
+    <condition id="ST7315 IO SPI Polling Condition">
+      <description>STMicroelectronics ST7315 IO SPI Polling Driver</description>
+      <require Cclass="Device" Cgroup="STM32 HAL" Csub="SPI"/>
+    </condition>
+    <condition id="ST7315 CFG Condition">
+      <description>STMicroelectronics configuration for ST7315 part driver</description>
+    </condition>
+    <condition id="ST7315 Custom IO Condition">
+      <description>STMicroelectronics custom io configuration for ST7315 part driver</description>
+    </condition>
+  </conditions>
+  <generators>
+    <generator id="st7315_mx2codegen">
+      <description>ST Microelectronics: STM32 Cube Code Generator for ST7315 Drivers Pack</description>
+      <exe>
+        <command host="win">.config/gen_code.bat</command>
+        <command host="linux">.config/gen_code.sh</command>
+        <command host="mac">.config/gen_code.sh</command>
+        <argument>st7315_mx2codegen</argument>
+        <argument>$G</argument>
+        <argument>STMicroelectronics.st7315_part_drivers.gpdsc.hbs</argument>
+        <argument mode="dry-run">--dry-run</argument>
+      </exe>
+      <gpdsc name="$P/STMicroelectronics.st7315_part_drivers.gpdsc"/>
+    </generator>
+  </generators>
+  <components>
+    <component Cvendor="STMicroelectronics" Cclass="Board Part" Cgroup="OLED" Csub="ST7315 Core" Cversion="1.0.0" condition="ST7315 Core Condition">
+      <description>Driver for ST7315 OLED Controller</description>
+      <files>
+        <file category="doc" name="README.md"/>
+        <file category="doc" name="Release_Notes.md"/>
+        <file category="doc" name="SW_Security_Level.md"/>
+        <file category="doc" name="doc/st_logo.png"/>
+        <file category="header" name="st7315.h"/>
+        <file category="source" name="st7315.c"/>
+      </files>
+    </component>
+    <component Cvendor="STMicroelectronics" Cclass="Board Part" Cgroup="OLED" Csub="ST7315 IO" Cvariant="SPI Polling" Cversion="1.0.0" condition="ST7315 IO SPI Polling Condition">
+      <description>Driver for ST7315 IO SPI Polling</description>
+      <files>
+        <file category="header" name="interfaces/spi/st7315_io.h"/>
+        <file category="source" name="interfaces/spi/st7315_io.c"/>
+      </files>
+    </component>
+    <component Cvendor="STMicroelectronics" Cclass="Board Part" Cgroup="OLED" Csub="ST7315 IO" Cvariant="Custom" Cversion="1.0.0" condition="ST7315 Custom IO Condition">
+      <description>Custom I/O layer for the ST7315 OLED Controller</description>
+      <files>
+        <file category="header" name="interfaces/custom/st7315_io.h" attr="config"/>
+        <file category="source" name="interfaces/custom/st7315_io.c" attr="config"/>
+      </files>
+    </component>
+    <component generator="st7315_mx2codegen" Cclass="Board Part" Cgroup="STM32CubeMX2 Config" Csub="ST7315" Cversion="1.0.0" condition="ST7315 CFG Condition" maxInstances="10">
+      <description>ST7315 STM32CubeMX2 Config</description>
+      <environments>
+        <environment name="STM32Cube">
+          <stm32:component>
+            <default-instance-name-prefix>ST7315</default-instance-name-prefix>
+            <supported-part-types>
+              <supported-part-type Hvendor="Sitronix Technology" Hname="ST7315-G5" Hgroup="OLED"/>
+            </supported-part-types>
+          </stm32:component>
+        </environment>
+      </environments>
+      <files>
+        <file category="genAsset" name=".config/gen_code.bat"/>
+        <file category="genAsset" name=".config/gen_code.sh"/>
+        <file category="genAsset" name=".config/STMicroelectronics.st7315_part_drivers.gpdsc.hbs"/>
+        <file category="genAsset" name=".config/mx_st7315_parameters.json"/>
+        <file category="genAsset" name=".config/template/hooks/mapping_hook.js"/>
+        <file category="genAsset" name=".config/template/mx_st7315_template.h.hbs"/>
+        <file category="genAsset" name=".config/template/mx_st7315_template.c.hbs"/>
+        <file category="genAsset" name=".config/template/license/mx_st7315_part_drivers_license_template.md.hbs"/>
+      </files>
+    </component>
+  </components>
+</package>
